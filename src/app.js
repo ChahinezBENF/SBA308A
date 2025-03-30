@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const similarArtists = await fetchSimilarArtists(artistName);
             renderSimilarArtists(similarArtists, artistInfoDiv);
         } else {
-            artistInfoDiv.innerHTML = '<h2>No artist information available.</h2>';
+            artistInfoDiv.innerHTML = '<p>No artist information available.</p>';
         }
 
         // Fetch and render recommendations
         const recommendedTracks = await fetchRecommendations(query, artistName);
             if (recommendedTracks.length === 0) {
-                recommendationsDiv.innerHTML = '<h2>No Recommendations Found</h2>';
+                recommendationsDiv.innerHTML = '<p>No Recommendations Found</p>';
             } else {
                 renderRecommendations(recommendedTracks, recommendationsDiv);
             }

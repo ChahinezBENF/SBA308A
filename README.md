@@ -1,4 +1,5 @@
-# Application :  music app using Last.fm's API
+# Application : 
+This project is a music discovery web application that allows users to explore and interact with music data using the Last.fm API
 # Features : 
 - Track Search :
   * Allow users to search for songs by name and display results with song details.
@@ -20,3 +21,6 @@
   * Display top tracks or artists by genre.
   * The fetchTopTracks() and fetchTopArtists() functions from api.js fetch global top tracks and artists.
   * Buttons for loading top tracks and artists have been integrated, and the renderTopCharts() function displays the results.
+
+# Last.fm API endpoints used :
+- 
