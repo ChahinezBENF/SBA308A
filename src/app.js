@@ -1,17 +1,27 @@
 
-import { fetchTrack , fetchArtistInfo, fetchSimilarArtists, fetchRecommendations } from './api.js';
-import { renderTracks, renderArtistInfo, renderSimilarArtists, renderRecommendations } from './ui.js';
+import { fetchTrack , fetchArtistInfo, fetchSimilarArtists, fetchRecommendations, fetchTopTracks, fetchTopArtists } from './api.js';
+import { renderTracks, renderArtistInfo, renderSimilarArtists, renderRecommendations, renderFavorites, renderTopCharts  } from './ui.js';
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    const searchButton = document.getElementById('search-button');
+    const searchButton = document.getElementById('search-button'); // Button for search
     const trackResultsDiv = document.getElementById('track-results');
     const artistInfoDiv = document.getElementById('artist-info');
     const recommendationsDiv = document.getElementById('recommendations');
+    const topChartsDiv = document.getElementById('top-charts'); // To access the container for displaying Top Charts results.
+    const loadTopTracksButton = document.getElementById('load-top-tracks'); // Button for top tracks
+    const loadTopArtistsButton = document.getElementById('load-top-artists'); // Button for top artists
+
+
+
+     // Render saved favorites 
+     renderFavorites();
+
 
     searchButton.addEventListener('click', async () => {
         const query = document.getElementById('track-input').value;
+        const artistName = document.getElementById('artist-input')?.value || '';
 
         // Clear previous results
         trackResultsDiv.innerHTML = '';
@@ -21,23 +31,59 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Fetch and render track results
         const tracks = await fetchTrack(query);
-        renderTracks(tracks, trackResultsDiv);
+        if (tracks.length === 0) {
+            // Display a message when no tracks are found
+            trackResultsDiv.innerHTML = '<p>No tracks found. Please try a different search.</p>';
+        } else {
+            renderTracks(tracks, trackResultsDiv);
+        }
 
-        // Fetch and render artist info
-        const artist = await fetchArtistInfo(query);
-        renderArtistInfo(artist, artistInfoDiv);
+        // Extract artist name from the first track result (if it exists)
+        if (tracks.length > 0) {
+            const artistName = tracks[0].artist; // Extract artist name from the first track result
 
-        // Fetch and render similar artists
-        const similarArtists = await fetchSimilarArtists(query);
-        renderSimilarArtists(similarArtists, artistInfoDiv);
+            // Fetch and render artist info using  artist name
+            const artist = await fetchArtistInfo(artistName);
+            renderArtistInfo(artist, artistInfoDiv);
+
+            // Fetch and render similar artists
+            const similarArtists = await fetchSimilarArtists(artistName);
+            renderSimilarArtists(similarArtists, artistInfoDiv);
+        } else {
+            artistInfoDiv.innerHTML = '<h2>No artist information available.</h2>';
+        }
 
         // Fetch and render recommendations
-        const recommendedTracks = await fetchRecommendations(query);
-        renderRecommendations(recommendedTracks, recommendationsDiv);
+        const recommendedTracks = await fetchRecommendations(query, artistName);
+            if (recommendedTracks.length === 0) {
+                recommendationsDiv.innerHTML = '<h2>No Recommendations Found</h2>';
+            } else {
+                renderRecommendations(recommendedTracks, recommendationsDiv);
+            }
+
         } catch (error) {
-            
+            console.error(error);
         }
-        console.error(error);
+        
+        // Add event listeners for Top Charts buttons
+    loadTopTracksButton.addEventListener('click', async () => {
+        try {
+            const topTracks = await fetchTopTracks(); // Fetch top tracks
+            renderTopCharts(topTracks, topChartsDiv); // Render top tracks in the UI
+        } catch (error) {
+            console.error('Error loading top tracks:', error);
+        }
+    });
+
+    loadTopArtistsButton.addEventListener('click', async () => {
+        try {
+            const topArtists = await fetchTopArtists(); // Fetch top artists
+            renderTopCharts(topArtists, topChartsDiv); // Render top artists in the UI
+        } catch (error) {
+            console.error('Error loading top artists:', error);
+        }
+    });
+
 
     });
 });

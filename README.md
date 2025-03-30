@@ -9,6 +9,14 @@
   * The  function fetchArtistInfo() to retrieve artist details (name, bio, image, etc.) from api.js.
   * The fetchSimilarArtists() function to fetch similar artists from api.js.
   * Results are displayed in the (#artist-info) div using renderArtistInfo()  and renderSimilarArtists() from ui.js.
-- Recommendations :  Suggest tracks or albums based on the user’s searches or preferences.
-- User Favorites :  Let users "favorite" songs and save them locally
-- Top Charts : Display top tracks or artists by genre.
+- Recommendations : 
+  * Suggest tracks or albums based on the user’s searches or preferences.
+  * The fetchRecommendations function calls the Last.fm track.getsimilar endpoint to suggest tracks based on the user’s search.
+- User Favorites :
+  * Let users "favorite" songs and save them locally
+  * The addToFavorites() function saves tracks, and renderFavorites() displays them in the favorites section.
+  Users can also remove tracks from their favorites using the removeFromFavorites() function.
+- Top Charts : 
+  * Display top tracks or artists by genre.
+  * The fetchTopTracks() and fetchTopArtists() functions from api.js fetch global top tracks and artists.
+  * Buttons for loading top tracks and artists have been integrated, and the renderTopCharts() function displays the results.
