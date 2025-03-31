@@ -97,7 +97,7 @@ export function renderArtistInfo(artist, container) {
 export function renderSimilarArtists(similarArtists, container) {
 
     // Limit to only 6 similar artists
-    const limitedArtists = similarArtists.slice(0, 6);
+    const limitedArtists = similarArtists.slice(0, 5);
 
     if (limitedArtists.length > 0) {
         container.innerHTML += '<h3>Similar Artists:</h3>';

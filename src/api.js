@@ -84,26 +84,10 @@ export async function fetchRecommendations(trackName, artistName = '') {
     }
 }
 
-//Fetch Topt Tracks
-// export async function fetchTopTracks() {
-//     try {
-//         const response = await fetch(
-//             `${BASE_URL}?method=chart.gettoptracks&api_key=${API_KEY}&format=json`
-//         );
-//         if (!response.ok) {
-//             throw new Error('Could not fetch top tracks');
-//         }
-//         const data = await response.json();
-//         return data.tracks.track; // Returns an array of top tracks
-//     } catch (error) {
-//         console.error('Error fetching top tracks:', error);
-//         return [];
-//     }
-// }
 
 
 
-export async function fetchTopTracks(limit = 10, page = 1) {
+export async function fetchTopTracks(limit = 5, page = 1) {
     try {
         const response = await fetch(
             `${BASE_URL}?method=chart.gettoptracks&api_key=${API_KEY}&limit=${limit}&page=${page}&format=json`
@@ -123,10 +107,10 @@ export async function fetchTopTracks(limit = 10, page = 1) {
 
 
 //Fetch Topt Artist
-export async function fetchTopArtists() {
+export async function fetchTopArtists(limit = 5, page = 1) {
     try {
         const response = await fetch(
-            `${BASE_URL}?method=chart.gettopartists&api_key=${API_KEY}&format=json`
+            `${BASE_URL}?method=chart.gettopartists&api_key=${API_KEY}&limit=${limit}&page=${page}&format=json`
         );
         if (!response.ok) {
             throw new Error('Could not fetch top artists');
@@ -140,3 +124,67 @@ export async function fetchTopArtists() {
 }
 
 
+// Function to scrobble a track
+export async function scrobbleTrack(artist, track, timestamp) {
+    const sessionKey = localStorage.getItem('sessionKey'); // Get session key from localStorage
+
+    if (!sessionKey) {
+        console.error("User is not authenticated. Please log in.");
+        return;
+    }
+
+    const url = `https://ws.audioscrobbler.com/2.0/?method=track.scrobble&api_key=${API_KEY}&sk=${sessionKey}&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&timestamp=${timestamp}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.error) {
+            console.error("Error scrobbling track:", data.message);
+            return;
+        }
+        console.log('Track successfully scrobbled:', data);
+    } catch (error) {
+        console.error('Error scrobbling track:', error);
+    }
+}
+
+// Request a token from Last.fm (for OAuth)
+export async function requestToken() {
+    const url = `https://ws.audioscrobbler.com/2.0/?method=auth.getToken&api_key=${API_KEY}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.error) {
+            console.error("Error getting request token:", data.message);
+            return;
+        }
+        
+        const token = data.token;
+        window.location.href = `https://www.last.fm/api/auth/?api_key=${API_KEY}&token=${token}`;
+    } catch (error) {
+        console.error('Error requesting token:', error);
+    }
+}
+
+// Get the session key after user authorization
+export async function getAccessToken(token) {
+    const url = `https://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=${API_KEY}&token=${token}&format=json`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+            console.error("Error getting session:", data.message);
+            return;
+        }
+
+        const sessionKey = data.session.key; // This is the 'sk' needed for scrobbling
+        console.log('Session Key:', sessionKey);
+        localStorage.setItem('sessionKey', sessionKey);
+    } catch (error) {
+        console.error('Error exchanging token for access:', error);
+    }
+}

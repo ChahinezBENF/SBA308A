@@ -1,5 +1,5 @@
 
-import { fetchTrack , fetchArtistInfo, fetchSimilarArtists, fetchRecommendations, fetchTopTracks, fetchTopArtists } from './api.js';
+import { fetchTrack , fetchArtistInfo, fetchSimilarArtists, fetchRecommendations, fetchTopTracks, fetchTopArtists, requestToken, scrobbleTrack  } from './api.js';
 import { renderTracks, renderArtistInfo, renderSimilarArtists, renderRecommendations, renderFavorites, renderTopCharts  } from './ui.js';
 
 
@@ -82,6 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error loading top artists:', error);
         }
+    });
+
+    // Add OAuth login button and scrobbling feature
+    const loginButton = document.getElementById('login-button');
+    const scrobbleButton = document.getElementById('scrobble-button'); // This should be added to your HTML for scrobbling
+
+    // Login button event listener
+    loginButton.addEventListener('click', () => {
+        // Trigger the OAuth flow to authenticate the user and get the session key
+        requestToken(); // to redirect the user to Last.fm for authentication
+    });
+
+    // Scrobble button event listener
+    scrobbleButton.addEventListener('click', () => {
+        const artist = document.getElementById('artist-input').value;
+        const track = document.getElementById('track-input').value;
+        const timestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+
+        // Call scrobble function to scrobble the track
+        scrobbleTrack(artist, track, timestamp);
     });
 
 
