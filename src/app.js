@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error(error);
         }
-        
+    });
         // Add event listeners for Top Charts buttons
     loadTopTracksButton.addEventListener('click', async () => {
         try {
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error loading top tracks:', error);
         }
-    });
+          });
 
     loadTopArtistsButton.addEventListener('click', async () => {
         try {
@@ -85,6 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    });
+    
 });
 

@@ -23,4 +23,23 @@ This project is a music discovery web application that allows users to explore a
   * Buttons for loading top tracks and artists have been integrated, and the renderTopCharts() function displays the results.
 
 # Last.fm API endpoints used :
-- 
+- track.search : Fetch tracks based on user input 
+- artist.getinfo : Retrieve detailed information about an artist, including biography and image
+- artist.getsimilar : etch a list of artists similar to the input artist
+- track.getsimilar : Suggest tracks similar to the input track
+- chart.gettoptracks : Retrieve the globally top-ranked artists.
+
+# Requirements : 
+1-  Use the fetch API or Axios to communicate with an external web API. Use the data provided by this API to populate your application’s content and features : Used the fetch API extensively to interact with the Last.fm API  by utilize the previeus endpoints (api.js)
+2- Create user interaction with the API through a search feature, paginated gallery, or similar. This feature should use GET requests to retrieve associated data: from api.js using fetchTrack() function retrieves data based on user input and in app.js connects the search feature to the user interface
+3- Enable user manipulation of data within the API through the use of POST, PUT, or PATCH requests. Ensure your chosen API supports this feature before beginning : using scrobbleTrack() function from api.js ////////////////////////////
+used documentation from : https://www.last.fm/api/show/track.scrobble
+4- Make use of Promises and async/await syntax as appropriate: from api.js exp: export async function fetchTrack(trackName){const response = await fetch .....}
+5- Organize your JavaScript code into at least three (3) different module files, and import functions and data across files as necessary:
+api.js and ui.js used for export and the app.js for import 
+6- Ensure the program runs as expected, without any undesired behavior caused by misunderstanding of the JavaScript event loop (such as race conditions, API calls being handled out of order, etc.): cheked
+7- Create an engaging user experience through the use of HTML and CSS: cheked in index.html and style.css
+8- Ensure that the program runs without errors (comment out things that do not work, and explain your blockers - you can still receive partial credit): cheked
+9- Commit frequently to the git repository : more than 4 commits
+10- Include a README file that contains a description of your application : Cheked
+11- Level of effort displayed in creativity, presentation, and user experience: Users can search for tracks, view results, learn more about artists, discover similar artists, and receive track recommendations. This interactivity keeps users engaged and encourages them to explore more content.

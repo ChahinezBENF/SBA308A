@@ -1,5 +1,7 @@
 const API_KEY = 'd14b6563838c504d042e94cc0be30957';
 const BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
+const SECRET = 'e0cbb371782841a98c422ffed91f7efc'; // Last.fm shared secret
+
 
 //retrive songs based on user's input
 export async function fetchTrack(trackName) {
@@ -83,21 +85,42 @@ export async function fetchRecommendations(trackName, artistName = '') {
 }
 
 //Fetch Topt Tracks
-export async function fetchTopTracks() {
+// export async function fetchTopTracks() {
+//     try {
+//         const response = await fetch(
+//             `${BASE_URL}?method=chart.gettoptracks&api_key=${API_KEY}&format=json`
+//         );
+//         if (!response.ok) {
+//             throw new Error('Could not fetch top tracks');
+//         }
+//         const data = await response.json();
+//         return data.tracks.track; // Returns an array of top tracks
+//     } catch (error) {
+//         console.error('Error fetching top tracks:', error);
+//         return [];
+//     }
+// }
+
+
+
+export async function fetchTopTracks(limit = 10, page = 1) {
     try {
         const response = await fetch(
-            `${BASE_URL}?method=chart.gettoptracks&api_key=${API_KEY}&format=json`
+            `${BASE_URL}?method=chart.gettoptracks&api_key=${API_KEY}&limit=${limit}&page=${page}&format=json`
         );
+
         if (!response.ok) {
-            throw new Error('Could not fetch top tracks');
+            throw new Error('Failed to fetch top tracks');
         }
-        const data = await response.json();
-        return data.tracks.track; // Returns an array of top tracks
+
+        const data = await response.json(); // Parse the JSON response
+        return data.tracks.track; // Return an array of top tracks
     } catch (error) {
         console.error('Error fetching top tracks:', error);
-        return [];
+        return []; // Return an empty array if there's an error
     }
 }
+
 
 //Fetch Topt Artist
 export async function fetchTopArtists() {
@@ -115,3 +138,5 @@ export async function fetchTopArtists() {
         return [];
     }
 }
+
+

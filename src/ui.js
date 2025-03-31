@@ -150,5 +150,3 @@ export function renderTopCharts(items, container) {
         });
     }
 }
-
-
