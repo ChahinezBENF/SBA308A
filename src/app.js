@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchButton.addEventListener('click', async () => {
         const query = document.getElementById('track-input').value;
-        const artistName = document.getElementById('artist-input')?.value || '';
+  
 
         // Clear previous results
         trackResultsDiv.innerHTML = '';
@@ -30,13 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Fetch and render track results
-        const tracks = await fetchTrack(query);
-        if (tracks.length === 0) {
-            // Display a message when no tracks are found
-            trackResultsDiv.innerHTML = '<p>No tracks found. Please try a different search.</p>';
-        } else {
-            renderTracks(tracks, trackResultsDiv);
-        }
+            const tracks = await fetchTrack(query);
+            if (tracks.length === 0) {
+                // Display a message when no tracks are found
+                trackResultsDiv.innerHTML = '<p>No tracks found. Please try a different search.</p>';
+            } else {
+                renderTracks(tracks, trackResultsDiv);
+            }
+    
 
         // Extract artist name from the first track result (if it exists)
         if (tracks.length > 0) {
@@ -96,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Scrobble button event listener
     scrobbleButton.addEventListener('click', () => {
-        const artist = document.getElementById('artist-input').value;
         const track = document.getElementById('track-input').value;
         const timestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
 
